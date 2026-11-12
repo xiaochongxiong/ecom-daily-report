@@ -1,0 +1,14 @@
+# .dockerignore 的注释必须独占一行，跟在模式后面的 # 会被当成模式的一部分
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.git
+.env
+data
+logs
+output
+*.db
+books.toscrape.com.html
+learn_pandas.py
+test.py

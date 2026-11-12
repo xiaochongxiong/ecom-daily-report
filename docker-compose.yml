@@ -1,0 +1,51 @@
+# 一条命令拉起整套环境：PostgreSQL + 模拟后台 + 定时任务
+# 用法：docker compose up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: report
+      POSTGRES_PASSWORD: report
+      POSTGRES_DB: report
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U report"]
+      interval: 5s
+      retries: 10
+
+  mock:
+    build: .
+    command: ["python", "mock_server.py"]
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: .
+    command: ["python", "scheduler.py"]
+    depends_on:
+      db:
+        condition: service_healthy
+      mock:
+        condition: service_started
+    volumes:
+      # 报告和日志是运行时产物，必须落在容器外的宿主机目录，重建容器才不丢
+      - ./output:/app/output
+      - ./logs:/app/logs
+    environment:
+      TZ: Asia/Shanghai
+      DATABASE_URL: postgresql+psycopg://report:report@db:5432/report
+      SOURCE: mock_api
+      MOCK_API_BASE: http://mock:8000
+      # 从项目根 .env 注入（compose 自动读取 .env 做变量替换），留空则只落盘不推送
+      FEISHU_WEBHOOK: ${FEISHU_WEBHOOK:-}
+      PUSH_POLICY: ${PUSH_POLICY:-always}
+      SCHEDULE_HOUR: "8"
+      SCHEDULE_MINUTE: "30"
+
+volumes:
+  pgdata:
