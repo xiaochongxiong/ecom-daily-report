@@ -22,7 +22,7 @@ class DailySkuMetric(Base):
 
     用 (biz_date, shop_id, sku_id) 做联合主键，就是为了幂等：
     同一天的数据重复跑，靠 session.merge() 覆盖而不是插入重复行。
-    这是"重复执行不会污染数据"的关键设计，面试一定要讲。
+    这是"重复执行不会污染数据"的关键设计。
     """
 
     __tablename__ = "daily_sku_metric"

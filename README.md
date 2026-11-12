@@ -78,7 +78,7 @@ ecom-daily-report/
     └── test_notify.py       # 推送决策 + 重试策略
 ```
 
-## 毛利与周转口径（面试重点）
+## 毛利与周转口径（易错点）
 
 ```
 毛利   = gmv - refund_amount - commission - ad_cost - shipping_cost - cost_of_goods
