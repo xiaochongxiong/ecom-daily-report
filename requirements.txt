@@ -1,0 +1,19 @@
+# 依赖清单
+# 学习方法：先跑通，再逐个替换成自己的实现
+
+pandas>=2.2          # 数据清洗与指标计算（岗位标签硬要求）
+SQLAlchemy>=2.0      # ORM，一套代码同时支持 SQLite 和 PostgreSQL
+requests>=2.31       # 调 API、推飞书
+python-dotenv>=1.0   # 读 .env 配置
+APScheduler>=3.10,<4 # 定时调度
+fastapi>=0.110       # 本地模拟电商后台（练习用，也是简历加分项）
+uvicorn>=0.29        # 跑 FastAPI
+pytest>=8.0          # 单元测试
+rich>=13.0           # 控制台彩色输出（调试用）
+
+# 网页解析（public_site 采集器用）
+pyquery>=2.0         # jQuery 风格的 CSS 选择器，底层是 lxml（自带 lxml/cssselect 依赖）
+
+# 可选：练浏览器自动化时再装（安装包较大，约 150MB）
+# 注意：mock_web 采集器依赖它，不装则 --source mock_web 不可用
+# playwright>=1.44
